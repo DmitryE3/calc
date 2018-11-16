@@ -5,21 +5,25 @@
 #превращается в anana-bay). Подробнее о правилах читайте в Википедии
 
 def pig_lat(word):
+    punctuation_mark=""
+    if word[len(word)-1] in ".,:!?":
+        punctuation_mark=word[len(word)-1]
+        word=word[:len(word)-1]
     if word[0] not in "aeiouy":
         for i in range(len(word)):
             if word[i] in "aeiouy":
-                word=word[i:]+word[:i]+'ay'
+                word=word[i:]+word[:i]+"ay"+punctuation_mark
                 break
     else:
-        word=word+'ay'
-    print(word,end=' ')
+        word=word+"ay"+punctuation_mark
+    print(word,end=" ")
 
 def main():
-    words=str(input('введите ваше предложение на английском языке: ')).lower()
-    words=words.split(' ')
+    words=str(input("Введите ваше предложение на английском языке: ")).lower()
+    words=words.split(" ")
     for i in words:
         pig_lat(i)
-    ext=input('\nPress Entr to exit')
+    ext=input("\nPress Entr to exit")
 
-if __name__=='__main__':
+if __name__=="__main__":
     main()
