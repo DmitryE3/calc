@@ -29,3 +29,4 @@ def main():
 
 if __name__=='__main__':
     main()
+    ext=input("\nPress Entr to exit")

@@ -11,3 +11,4 @@ while n!=1:
     else:
         n=n*3+1
 print(count,' шагов до единицы')
+ext=input("\nPress Entr to exit")
