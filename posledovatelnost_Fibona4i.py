@@ -4,8 +4,8 @@
 
 
 def fibonachi(list_fib,n):
-    if n==1 or n==2:
-        return 1
+    if n==1:
+        return list_fib
     else:
         while True:
             x=list_fib[len(list_fib)-1]+list_fib[len(list_fib)-2]
@@ -17,7 +17,7 @@ def fibonachi(list_fib,n):
         return list_fib
 
 def main():
-    list_fib=[1,1]
+    list_fib=[0,1]
     n=int(input('Введите число: '))
     print(fibonachi(list_fib,n))
     ext=input('Нажмите ENTR для выхода')
