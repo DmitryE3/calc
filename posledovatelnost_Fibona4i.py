@@ -5,7 +5,8 @@
 
 def fibonachi(list_fib,n):
     if n==1:
-        return list_fib
+#        return list_fib
+        pass
     else:
         while True:
             x=list_fib[len(list_fib)-1]+list_fib[len(list_fib)-2]
@@ -14,7 +15,7 @@ def fibonachi(list_fib,n):
             else:
                 list_fib.append(x)
                 fibonachi(list_fib,n)
-        return list_fib
+    return list_fib
 
 def main():
     list_fib=[0,1]
