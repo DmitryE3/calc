@@ -12,6 +12,11 @@ def delete_punctuation(text):
 def converter_text_to_word(text):
     return text.split()
 
-text=input('Введите ваш текст: ')
-text=converter_text_to_word(delete_punctuation(text))
-print(text)
+def main():
+    text = input('Введите ваш текст: ')
+    text = converter_text_to_word(delete_punctuation(text))
+    print(text)
+
+
+if __name__=="__main__":
+    main()
