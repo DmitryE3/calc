@@ -7,12 +7,12 @@
 def vowel_counter(words): #Счетчик всех гласных
     count=0
     for i in words:
-        if i in vowel:
+        if i in 'aeiou':
             count+=1
     return count
 
 def sum_different_vowel(words): #Подсчет гласных поштучно
-    for i in vowel:
+    for i in 'aeiou':
         print('букв ', i,' в строке', words.count(i), 'штук')
 
 def main():
@@ -22,5 +22,4 @@ def main():
     input('нажмите ентр чтоб выйти')
 
 if __name__=='__main__':
-    vowel='aeiou'
     main()
