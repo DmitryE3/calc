@@ -1,5 +1,4 @@
 from tkinter import *
-import recepts
 import sqlite3
 
 
@@ -28,17 +27,39 @@ class Report(Frame):
     def flush(selfself):
         pass
 
-beer_bd=sqlite3.connect('beer.db')
-cur=beer_bd.cursor()
+def select_item(event): #извлечение названия выбранного сорта пва
+    sort_beer = (lst_box.get(lst_box.curselection()))
+    run_beer(sort_beer)
+
+def refresh_list():  #обновление списка сортов
+    lst_box.delete(0,END)
+    cur.execute("SELECT name FROM table1 WHERE level=%s"%var.get())
+    for beer in cur.fetchall():
+        lst_box.insert(END, beer[0])
+
+def cleaning():
+    txt_opisanie.clear()
+    txt_recept.clear()
+    txt_ruls.clear()
+    txt_haract.clear()
+
+def run_beer(sort_beer):
+    cur.execute("SELECT * FROM table1 WHERE name=%s"%("'"+sort_beer+"'"));
+    q = cur.fetchall()[0]
+    cleaning()
+    lbl_name['text']=q[1]
+    txt_opisanie.write(q[2])
+    txt_recept.write(q[3])
+    txt_ruls.write(q[5])
+    txt_haract.write(q[4])
+
+beer_db=sqlite3.connect('beer.db')
+cur=beer_db.cursor()
 
 root = Tk()
 root.title('Домашнее пивоварение')
 root.geometry('700x550')
 root.resizable(width=False,height=False)
-
-def select_item(event):
-    sort_beer = (lst_box.get(lst_box.curselection()))
-    recepts.run_beer(sort_beer)
 
 lst_box = Listbox(root,width=40,height=10) #Создание списка для сортов пива, потом к нему прикрутим сложность
 lst_box.place(x=5,y=3)
@@ -48,9 +69,17 @@ scrl_box['command']=lst_box.yview
 lst_box['yscrollcommand']=scrl_box.set
 lst_box.bind('<<ListboxSelect>>', select_item)
 
-cur.execute("SELECT name FROM table1")
-for beer in cur.fetchall():
-    lst_box.insert(END,beer[0])
+var=IntVar()
+var.set(1)
+rbtn_level1=Radiobutton(text='Сложность 1',variable=var, value=1)
+rbtn_level1.place(x=260,y=3)
+rbtn_level2=Radiobutton(text='Сложность 2',variable=var, value=2)
+rbtn_level2.place(x=260,y=25)
+rbtn_level3=Radiobutton(text='Сложность 3',variable=var, value=3)
+rbtn_level3.place(x=260,y=47)
+btn_refresh=Button(text="Обновить", height=1,width=13,command=refresh_list)
+btn_refresh.place(x=260,y=80)
+refresh_list() #запуск содержимого листа по умолчанию
 
 lbl_name = Label(root,text='Описание: ')  # Создаем поле для указания сорта
 lbl_name.place(x=5,y=180)
@@ -75,26 +104,5 @@ txt_ruls.place(x=270 ,y=360)
 
 lbl_ruls = Label(root, text='Процесс варки: ') # Лейбл для обозначения процесса варки
 lbl_ruls.place(x=270,y=339)
-
-#mainmenu = Menu(root)  # создаем меню выбора сортов
-#root.config(menu=mainmenu)
-
-#hard = Menu(mainmenu, tearoff=0)  # Создаем меню разного
-
-#stout_command=[['Золотистый эль в английском стиле',recepts.beer1],['Экстра спешиал биттер (ESB)',recepts.beer2]]
-
-#cur.execute("SELECT name FROM table1")
-#easy_command=cur.fetchall()
-#easy = Menu(mainmenu, tearoff=0)  # Создаем меню для стаутов
-#for i in easy_command:
-#    easy.add_command(label=i[0])
-
-#apa = ['апа 1', 'апа 2']
-#medium = Menu(mainmenu, tearoff=0)  # Создаем меню для АПА
-#medium.add_command(label='АПА1',command=recepts.apa1)
-
-#mainmenu.add_cascade(label='Сложность 1', menu=easy)
-#mainmenu.add_cascade(label='Сложность 2', menu=medium)
-#mainmenu.add_cascade(label='Сложность 3', menu=hard)
 
 root.mainloop()
