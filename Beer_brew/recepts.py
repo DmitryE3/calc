@@ -1,4 +1,9 @@
 import beer
+import sqlite3
+
+connection=sqlite3.connect('beer.db')
+cur = connection.cursor()
+
 
 def cleaning():
     beer.txt_opisanie.clear()
@@ -6,26 +11,14 @@ def cleaning():
     beer.txt_ruls.clear()
     beer.txt_haract.clear()
 
-def easy1():
+def run_beer(sort_beer):
+    cur.execute("SELECT * FROM table1 WHERE name=%s"%("'"+sort_beer+"'"));
+    q = cur.fetchall()[0]
     cleaning()
-    beer.lbl_name['text']='Золотистый эль в английском стиле'
-    beer.txt_opisanie.write('Легкий и освежающий английский эль с оттенком ирисок, характерной цветочной ароматикой,'\
-                            'свойственной британскому хмелю, и ощутимой хмелевой горчинкой')
-    beer.txt_recept.write('На 23.5 литров: \n2.1кг светлого жидкого солодового экстракта \n300г пшеничного жидкого '\
-                          ' солодового экстракта \n300г светлого карамелевого солода (цветнсоть до 10 EBC) \n' \
-                          '30u East Kent Goldings(60 минут) \n10г Fuggle(15 минут) \n20г East Kent Goldings(0 минут)'\
-                          '\nПодходящие дрожжи: s-04,wlp002,1028 \nГлюкоза для карбонизации: 5г на литр')
-    beer.txt_ruls.write('Положите мешочек с карамельным солодомм в кастрюлю с 3л воды (71°C), выдержите 15 минут.' \
-                        ' Мешочек вынте. Добавьте светлый и пшеничный солодовый экстракт, долейте воду до 23.5 л\n' \
-                        'Общее время кипячения - 60 минут\nОсновное брожение - 5 дней (18-22°C)\nВторичное брожение -' \
-                        ' 7 дней')
-    beer.txt_haract.write('HTT: 10\nPA: 3.8-4.2% ABV\nЦв: 9-15 EBC\nУрГ:25-30 IBU')
+    beer.lbl_name['text']=q[1]
+    beer.txt_opisanie.write(q[2])
+    beer.txt_recept.write(q[3])
+    beer.txt_ruls.write(q[5])
+    beer.txt_haract.write(q[4])
 
-def easy2():
-    beer.lbl_name['text']='Стаут2'
 
-def easy3():
-    beer.lbl_name['text']='Стаут3'
-
-def apa1():
-    beer.lbl_name['text']='АПА1'
