@@ -2,7 +2,7 @@ from tkinter import *
 import sqlite3
 
 
-class Report(Frame):
+class Report(Frame): # Создаем класс для отображения всех окон с информацией
     def __init__(self,parent,*args,**kwargs):
         super().__init__(parent)
 
@@ -10,7 +10,6 @@ class Report(Frame):
         scrollbar.pack(side='right',fill='y')
         self._text = Text(self,state=DISABLED, wrap='word',*args,**kwargs)
         self._text.pack(side='left',fill='both',expand=1)
-
         scrollbar['command']=self._text.yview
         self._text['yscrollcommand']=scrollbar.set
 
@@ -37,19 +36,36 @@ def refresh_list():  #обновление списка сортов
     for beer in cur.fetchall():
         lst_box.insert(END, beer[0])
 
-def cleaning():
+def refresh_litr():
+    litr=ent_litr.get()
+    try:
+        litr=float(litr)
+        sort=lbl_name['text']
+        run_beer(sort,litr)
+    except ValueError:
+        pass
+
+
+def cleaning(): #Очистка всех окон
     txt_opisanie.clear()
     txt_recept.clear()
     txt_ruls.clear()
     txt_haract.clear()
 
-def run_beer(sort_beer):
+def proporcii(info,litr): # Преобразование пропорций под нужный литраж
+    info=info.split(',')
+    x=float(info[0])
+    for i in range(len(info)):
+        info[i]=(float(info[i])/x)*litr
+    return tuple(info)
+
+def run_beer(sort_beer,x=23.5): # Добавление инфы во все окна
     cur.execute("SELECT * FROM table1 WHERE name=%s"%("'"+sort_beer+"'"));
     q = cur.fetchall()[0]
     cleaning()
     lbl_name['text']=q[1]
     txt_opisanie.write(q[2])
-    txt_recept.write(q[3])
+    txt_recept.write(q[3]%proporcii(q[7],x))
     txt_ruls.write(q[5])
     txt_haract.write(q[4])
 
@@ -69,17 +85,25 @@ scrl_box['command']=lst_box.yview
 lst_box['yscrollcommand']=scrl_box.set
 lst_box.bind('<<ListboxSelect>>', select_item)
 
-var=IntVar()
+var=IntVar() #Создаем список сортов
 var.set(1)
-rbtn_level1=Radiobutton(text='Сложность 1',variable=var, value=1)
+rbtn_level1=Radiobutton(root,text='Сложность 1',variable=var, value=1)
 rbtn_level1.place(x=260,y=3)
-rbtn_level2=Radiobutton(text='Сложность 2',variable=var, value=2)
+rbtn_level2=Radiobutton(root,text='Сложность 2',variable=var, value=2)
 rbtn_level2.place(x=260,y=25)
-rbtn_level3=Radiobutton(text='Сложность 3',variable=var, value=3)
+rbtn_level3=Radiobutton(root,text='Сложность 3',variable=var, value=3)
 rbtn_level3.place(x=260,y=47)
-btn_refresh=Button(text="Обновить", height=1,width=13,command=refresh_list)
+btn_refresh=Button(root,text="Обновить", height=1,width=13,command=refresh_list)
 btn_refresh.place(x=260,y=80)
 refresh_list() #запуск содержимого листа по умолчанию
+
+lbl_litr=Label(root,text="Литры:") #создаем кнопку расчета литража
+lbl_litr.place(x=260,y=115)
+ent_litr = Entry(root,width=10)
+ent_litr.place(x=305,y=115)
+btn_litr=Button(root,text="Пересчитать",height=1,width=13,command=refresh_litr)
+btn_litr.place(x=260,y=140)
+
 
 lbl_name = Label(root,text='Описание: ')  # Создаем поле для указания сорта
 lbl_name.place(x=5,y=180)
