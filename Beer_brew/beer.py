@@ -60,7 +60,7 @@ def proporcii(info,litr): # Преобразование пропорций по
         info[i]=round(info[i],1)
     return tuple(info)
 
-def run_beer(sort_beer,x=23.5): # Добавление инфы во все окна
+def run_beer(sort_beer,x=10): # Добавление инфы во все окна
     cur.execute("SELECT * FROM table1 WHERE name=%s"%("'"+sort_beer+"'"));
     q = cur.fetchall()[0]
     preobrazovanie=proporcii(q[7],x)
@@ -75,6 +75,7 @@ def run_beer(sort_beer,x=23.5): # Добавление инфы во все ок
     else:
         lbl_remarc['text']=''
 
+
 beer_db=sqlite3.connect('beer.db')
 cur=beer_db.cursor()
 
@@ -83,12 +84,8 @@ root.title('Домашнее пивоварение')
 root.geometry('700x550')
 root.resizable(width=False,height=False)
 
-lst_box = Listbox(root,width=40,height=10) #Создание списка для сортов пива, потом к нему прикрутим сложность
+lst_box = Listbox(width=40,height=10) #Создание списка для сортов пива, потом к нему прикрутим сложность
 lst_box.place(x=5,y=3)
-scrl_box = Scrollbar() #создаем полосу прокрутки для списка пив
-scrl_box.pack(side='right',fill='y')
-scrl_box['command']=lst_box.yview
-lst_box['yscrollcommand']=scrl_box.set
 lst_box.bind('<<ListboxSelect>>', select_item)
 
 var=IntVar() #Создаем список сортов
@@ -114,28 +111,28 @@ btn_litr.place(x=260,y=140)
 lbl_name = Label(root,text='Описание: ')  # Создаем поле для указания сорта
 lbl_name.place(x=5,y=180)
 
-txt_opisanie = Report(root,width=50, height=8)
+txt_opisanie = Report(root,width=50, height=5)
 txt_opisanie.place(x=5,y=200) #создаем текстовое окно для описания
 
 lbl_haract = Label(root, text='Характеристика пива:') #Создаем поле для указания характеристик
 lbl_haract.place(x=430,y=180)
 
-txt_haract = Report(root, width=30, height=8) #Создаем текстовое поле для характеристик
+txt_haract = Report(root, width=30, height=5) #Создаем текстовое поле для характеристик
 txt_haract.place(x=430,y=200)
 
 lbl_rec = Label(root,text='Рецепт:') # создаем лейбл "рецепт"
-lbl_rec.place(x=5,y=339)
+lbl_rec.place(x=5,y=288)
 
-txt_recept = Report(root, width=30, height=11) # текстовое поле для рецепта
-txt_recept.place(x=5,y=360)
+txt_recept = Report(root, width=40, height=14) # текстовое поле для рецепта
+txt_recept.place(x=5,y=310)
 
-txt_ruls = Report(root, width=50, height=8) # текстовое поле для правил варки
-txt_ruls.place(x=270 ,y=360)
+txt_ruls = Report(root, width=40, height=12) # текстовое поле для правил варки
+txt_ruls.place(x=340 ,y=310)
 
 lbl_ruls = Label(root, text='Процесс варки: ') # Лейбл для обозначения процесса варки
-lbl_ruls.place(x=270,y=339)
+lbl_ruls.place(x=340,y=288)
 
 lbl_remarc = Label(root,width=55, height=1)
-lbl_remarc.place(x=280,y=500)
+lbl_remarc.place(x=330,y=520)
 
 root.mainloop()
