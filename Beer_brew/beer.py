@@ -1,6 +1,6 @@
 from tkinter import *
 import sqlite3
-
+import os
 
 class Report(Frame): # Создаем класс для отображения всех окон с информацией
     def __init__(self,parent,*args,**kwargs):
@@ -23,6 +23,9 @@ class Report(Frame): # Создаем класс для отображения �
         self._text.delete(0.0,END)
         self._text.configure(state=DISABLED)
 
+    def get(self):
+        return self._text.get(0.0,END)
+
     def flush(selfself):
         pass
 
@@ -44,7 +47,6 @@ def refresh_litr(): #Пересчет литража
         run_beer(sort,litr)
     except ValueError:
         pass
-
 
 def cleaning(): #Очистка всех окон
     txt_opisanie.clear()
@@ -76,6 +78,24 @@ def run_beer(sort_beer,x=10): # Добавление инфы во все окн
         lbl_remarc['text']=''
 
 
+def run_print():#запуск печати рецепта
+    try:
+        os.remove('recept.txt')
+    except OSError:
+        pass
+    with open('recept.txt','a') as print_file:
+        print_file.write('\n')
+        print_file.write(lbl_name['text'])
+        print_file.write('\n')
+        print_file.write(txt_opisanie.get())
+        print_file.write('\nХарактеристики\n')
+        print_file.write(txt_haract.get())
+        print_file.write('\nРецепт:\n')
+        print_file.write(txt_recept.get())
+        print_file.write('\nПравила варки:\n')
+        print_file.write(txt_ruls.get())
+        os.startfile('recept.txt','print')
+
 beer_db=sqlite3.connect('beer.db')
 cur=beer_db.cursor()
 
@@ -99,6 +119,9 @@ rbtn_level3.place(x=260,y=47)
 btn_refresh=Button(text="Обновить", height=1,width=13,command=refresh_list)
 btn_refresh.place(x=260,y=80)
 refresh_list() #запуск содержимого листа по умолчанию
+
+btn_print=Button(text="Печать", height=1,width=13,command=run_print)
+btn_print.place(x=580,y=10)
 
 lbl_litr=Label(text="Литры:") #создаем кнопку расчета литража
 lbl_litr.place(x=260,y=115)
