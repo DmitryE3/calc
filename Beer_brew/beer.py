@@ -1,6 +1,7 @@
 from tkinter import *
 import sqlite3
 import os
+import signal
 
 class Report(Frame): # Создаем класс для отображения всех окон с информацией
     def __init__(self,parent,*args,**kwargs):
@@ -79,10 +80,6 @@ def run_beer(sort_beer,x=10): # Добавление инфы во все окн
 
 
 def run_print():#запуск печати рецепта
-    try:
-        os.remove('recept.txt')
-    except OSError:
-        pass
     with open('recept.txt','a') as print_file:
         print_file.write('\n')
         print_file.write(lbl_name['text'])
@@ -95,6 +92,15 @@ def run_print():#запуск печати рецепта
         print_file.write('\nПравила варки:\n')
         print_file.write(txt_ruls.get())
         os.startfile('recept.txt','print')
+        with open('recept.txt','w') as clean_file:
+            clean_file.write('')
+
+def handler(): #Удаление временного файла с рецептом
+    try:
+        os.remove('recept.txt')
+    except OSError:
+        pass
+    root.destroy()
 
 beer_db=sqlite3.connect('beer.db')
 cur=beer_db.cursor()
@@ -103,6 +109,9 @@ root = Tk()
 root.title('Домашнее пивоварение')
 root.geometry('700x550')
 root.resizable(width=False,height=False)
+
+root.protocol("WM_DELETE_WINDOW", handler)
+
 
 lst_box = Listbox(width=40,height=10) #Создание списка для сортов пива, потом к нему прикрутим сложность
 lst_box.place(x=5,y=3)
