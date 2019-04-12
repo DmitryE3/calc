@@ -80,7 +80,7 @@ def run_beer(sort_beer,x=10): # Добавление инфы во все окн
 
 
 def run_print():#запуск печати рецепта
-    with open('recept.txt','a') as print_file:
+    with open('recept.txt','a') as print_file: #Создаем временный файл для печати
         print_file.write('\n')
         print_file.write(lbl_name['text'])
         print_file.write('\n')
@@ -92,10 +92,10 @@ def run_print():#запуск печати рецепта
         print_file.write('\nПравила варки:\n')
         print_file.write(txt_ruls.get())
         os.startfile('recept.txt','print')
-        with open('recept.txt','w') as clean_file:
+        with open('recept.txt','w') as clean_file: #очищаем временный файл для будущей печати
             clean_file.write('')
 
-def handler(): #Удаление временного файла с рецептом
+def handler(): #Удаление временного файла с рецептом при закрытии программы
     try:
         os.remove('recept.txt')
     except OSError:
