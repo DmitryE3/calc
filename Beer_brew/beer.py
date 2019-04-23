@@ -95,23 +95,32 @@ def run_print():#запуск печати рецепта
         with open('recept.txt','w') as clean_file: #очищаем временный файл для будущей печати
             clean_file.write('')
 
-def handler(): #Удаление временного файла с рецептом при закрытии программы
-    try:
-        os.remove('recept.txt')
-    except OSError:
-        pass
-    root.destroy()
+def close(): #Функция закрытия окна с удалением временного файла и запросом на подтверждение закрытия
+    def destroy1():
+        ext_root.destroy()
+        try:
+            os.remove('recept.txt')
+        except OSError:
+            pass
+        root.destroy()
+    ext_root=Toplevel()
+    ext_root.title('Выход')
+    ext_root.geometry('200x60')
+    exit_lbl=Label(ext_root,text='Вы уверены, что хотите выйти?')
+    exit_lbl.place(x=0,y=0)
+    y_btn=Button(ext_root,text='Да!',height=1,width=4,command=destroy1)
+    y_btn.place(x=30,y=30)
+    n_btn=Button(ext_root,text='Нет!',height=1,width=4,command=ext_root.destroy)
+    n_btn.place(x=90,y=30)
+    ext_root.resizable(width=False,height=False)
 
-beer_db=sqlite3.connect('beer.db')
-cur=beer_db.cursor()
+cur=sqlite3.connect('beer.db').cursor()
 
 root = Tk()
 root.title('Домашнее пивоварение')
 root.geometry('700x550')
 root.resizable(width=False,height=False)
-
-root.protocol("WM_DELETE_WINDOW", handler)
-
+root.protocol("WM_DELETE_WINDOW", close)
 
 lst_box = Listbox(width=40,height=10) #Создание списка для сортов пива, потом к нему прикрутим сложность
 lst_box.place(x=5,y=3)
@@ -131,6 +140,9 @@ refresh_list() #запуск содержимого листа по умолча
 
 btn_print=Button(text="Печать", height=1,width=13,command=run_print)
 btn_print.place(x=580,y=10)
+
+btn_exit=Button(text="Выход", height=1, width=13, command=close)
+btn_exit.place(x=580,y=140)
 
 lbl_litr=Label(text="Литры:") #создаем кнопку расчета литража
 lbl_litr.place(x=260,y=115)
