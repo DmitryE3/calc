@@ -96,7 +96,7 @@ def run_print():#запуск печати рецепта
             clean_file.write('')
 
 def close(): #Функция закрытия окна с удалением временного файла и запросом на подтверждение закрытия
-    def destroy1():
+    def destroy1(): #ф-я подтверждения выхода
         ext_root.destroy()
         try:
             os.remove('recept.txt')
@@ -104,7 +104,7 @@ def close(): #Функция закрытия окна с удалением в�
             pass
         root.destroy()
 
-    def destroy2():
+    def destroy2(): #ф-я отмены процедуры выхода
         ext_root.destroy()
         for i in widgets:
             i['state']=NORMAL
@@ -115,15 +115,16 @@ def close(): #Функция закрытия окна с удалением в�
         i['state']=DISABLED
     root.protocol("WM_DELETE_WINDOW", DISABLED)
     ext_root=Toplevel()
+    ext_root.protocol("WM_DELETE_WINDOW", destroy2)
     ext_root.title('Выход')
     ext_root.geometry('200x60')
     ext_root.wm_attributes('-topmost',1)
     exit_lbl=Label(ext_root,text='Вы уверены, что хотите выйти?')
     exit_lbl.place(x=0,y=0)
-    y_btn=Button(ext_root,text='Да!',height=1,width=4,command=destroy1)
+    y_btn=Button(ext_root,text='Да!',height=1,width=5,command=destroy1,bg='red')
     y_btn.place(x=30,y=30)
-    n_btn=Button(ext_root,text='Нет!',height=1,width=4,command=destroy2)
-    n_btn.place(x=90,y=30)
+    n_btn=Button(ext_root,text='Нет!',height=1,width=5,command=destroy2,bg='green')
+    n_btn.place(x=100,y=30)
     ext_root.resizable(width=False,height=False)
 
 cur=sqlite3.connect('beer.db').cursor()
