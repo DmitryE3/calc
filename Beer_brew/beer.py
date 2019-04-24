@@ -1,7 +1,7 @@
 from tkinter import *
 import sqlite3
 import os
-import signal
+
 
 class Report(Frame): # Создаем класс для отображения всех окон с информацией
     def __init__(self,parent,*args,**kwargs):
@@ -103,14 +103,26 @@ def close(): #Функция закрытия окна с удалением в�
         except OSError:
             pass
         root.destroy()
+
+    def destroy2():
+        ext_root.destroy()
+        for i in widgets:
+            i['state']=NORMAL
+        root.protocol("WM_DELETE_WINDOW", close)
+
+    widgets=[btn_refresh,btn_litr,btn_print,btn_exit,lst_box,rbtn_level1,rbtn_level2,rbtn_level3]
+    for i in widgets:
+        i['state']=DISABLED
+    root.protocol("WM_DELETE_WINDOW", DISABLED)
     ext_root=Toplevel()
     ext_root.title('Выход')
     ext_root.geometry('200x60')
+    ext_root.wm_attributes('-topmost',1)
     exit_lbl=Label(ext_root,text='Вы уверены, что хотите выйти?')
     exit_lbl.place(x=0,y=0)
     y_btn=Button(ext_root,text='Да!',height=1,width=4,command=destroy1)
     y_btn.place(x=30,y=30)
-    n_btn=Button(ext_root,text='Нет!',height=1,width=4,command=ext_root.destroy)
+    n_btn=Button(ext_root,text='Нет!',height=1,width=4,command=destroy2)
     n_btn.place(x=90,y=30)
     ext_root.resizable(width=False,height=False)
 
@@ -122,7 +134,7 @@ root.geometry('700x550')
 root.resizable(width=False,height=False)
 root.protocol("WM_DELETE_WINDOW", close)
 
-lst_box = Listbox(width=40,height=10) #Создание списка для сортов пива, потом к нему прикрутим сложность
+lst_box = Listbox(width=40,height=10) #Создание списка для сортов пива
 lst_box.place(x=5,y=3)
 lst_box.bind('<<ListboxSelect>>', select_item)
 
