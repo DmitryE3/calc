@@ -54,6 +54,10 @@ def make_money(x):
     money=x+x
     return money
 
-N=100
-M='11 20 30 40 11 99'
-all_combination=try_sum(make_money(M),N)
+def main():
+    N=100
+    M='11 20 30 40 11 99'
+    all_combination=try_sum(make_money(M),N)
+
+if __name__=='__main__':
+    main()
