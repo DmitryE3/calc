@@ -13,6 +13,7 @@
 #указанную сумму, выведите одно число -1 (минус один).
 import itertools
 
+
 #def combinations(money):                          #Вариант с перебором всех возможных вариантов
 #    all_combination = []
 #    for i in range(len(money)+1):
@@ -28,7 +29,7 @@ import itertools
 #    else:
 #        print(0)
 
-def variants(money):                               # Вариант, в котором программа ищет первый подходящий вариант
+def get_variants(money):                               # Вариант, в котором программа ищет первый подходящий вариант
     for i in range(1,len(money)+1):
         for j in itertools.combinations(money,i):
             yield j
@@ -38,7 +39,7 @@ def try_sum(money,N):
         print(-1)
     else:
 #        find_change(all_combination,N)
-        temp=variants(money)
+        temp=get_variants(money)
         while True:
             try:
                 x=next(temp)
@@ -49,15 +50,15 @@ def try_sum(money,N):
                 print(0)
                 break
 
-def make_money(x):
+def get_coins(x):
     x=[int(i) for i in x.split()]
     money=x+x
     return money
 
 def main():
-    N=100
-    M='11 20 30 40 11 99'
-    all_combination=try_sum(make_money(M),N)
+    N=112
+    M='11 20 30 40 11 99 5'
+    try_sum(get_coins(M),N)
 
 if __name__=='__main__':
     main()
