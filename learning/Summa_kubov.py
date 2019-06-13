@@ -16,32 +16,28 @@ def generator(cubs):
             yield cubs
 
 def get_cubs(cubs,N):
-    temp=cubs
-    print(temp)
-    for i in range(len(cubs)):
-        temp[i]=temp[i]**3
-    if len(temp)>8:
-        return "Imposible"
-    elif sum(temp)==N:
-        print('srabotal!!!!')
- #       return '123123123123123'
-    elif sum(temp)>N:
-        add_one_more_element(temp)
-    else:
+    global gen
+    x=cubs[:]
+    for i in range(len(x)):
+        x[i]=x[i]**3
+    if len(x)>8:
+        print("Imposible")
+    elif sum(x)==N:
+        print(cubs)
+    elif sum(x)>N:
+        for i in range(len(cubs)):
+            cubs[i]=0
+        cubs.append(0)
+        gen=generator(cubs)
         cubs=next(gen)
         get_cubs(cubs,N)
-
-def add_one_more_element(temp):
-    for i in range(len(temp)):
-        temp[i]=0
-    temp.append(0)
-    gen=generator(temp)
-    cubs=next(gen)
-    get_cubs(cubs,N)
+    else:
+        cubs=next(gen)
+        print(cubs)
+        get_cubs(cubs,N)
 
 
-cubs=[0,0,0,0,0,0,0,0,0,0,0,0]
-N=8
+cubs=[0]
+N=19
 gen=generator(cubs)
-print(get_cubs(cubs,N))
-
+get_cubs(cubs,N)
