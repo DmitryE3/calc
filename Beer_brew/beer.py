@@ -6,7 +6,6 @@ import os
 class Report(Frame):  # Создаем класс для отображения всех окон с информацией
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent)
-
         scrollbar = Scrollbar(self)
         scrollbar.pack(side='right', fill='y')
         self._text = Text(self, state=DISABLED, wrap='word', *args, **kwargs)
@@ -111,12 +110,12 @@ def close():  # Функция закрытия окна с удалением �
             pass
         root.destroy()
 
+
     def destroy2():  # ф-я отмены процедуры выхода
         ext_root.destroy()
         for i in widgets:
             i['state'] = NORMAL
         root.protocol("WM_DELETE_WINDOW", close)
-
     widgets = [btn_refresh, btn_litr, btn_print, btn_exit, lst_box, rbtn_level1, rbtn_level2, rbtn_level3]
     for i in widgets:
         i['state'] = DISABLED
@@ -136,7 +135,6 @@ def close():  # Функция закрытия окна с удалением �
 
 
 cur = sqlite3.connect('beer.db').cursor()  # цепляем базу данных
-
 root = Tk()
 root.title('Домашнее пивоварение')
 root.geometry('700x550')
@@ -146,7 +144,6 @@ root.protocol("WM_DELETE_WINDOW", close)
 lst_box = Listbox(width=40, height=10)  # Создание списка для сортов пива
 lst_box.place(x=5, y=3)
 lst_box.bind('<<ListboxSelect>>', select_item)
-
 var = IntVar()  # Создаем список сортов
 var.set(1)
 rbtn_level1 = Radiobutton(text='Сложность 1', variable=var, value=1)
@@ -158,45 +155,32 @@ rbtn_level3.place(x=260, y=47)
 btn_refresh = Button(text="Обновить", height=1, width=13, command=refresh_list)
 btn_refresh.place(x=260, y=80)
 refresh_list()  # запуск содержимого листа по умолчанию
-
 btn_print = Button(text="Печать", height=1, width=13, command=run_print)
 btn_print.place(x=580, y=10)
-
 btn_exit = Button(text="Выход", height=1, width=13, command=close)
 btn_exit.place(x=580, y=140)
-
 lbl_litr = Label(text="Литры:")  # создаем кнопку расчета литража
 lbl_litr.place(x=260, y=115)
 ent_litr = Entry(width=10, textvariable=StringVar())
 ent_litr.place(x=305, y=115)
 btn_litr = Button(text="Пересчитать", height=1, width=13, command=refresh_volume)
 btn_litr.place(x=260, y=140)
-
 lbl_name = Label(root, text='Описание: ')  # Создаем поле для указания сорта
 lbl_name.place(x=5, y=180)
-
 txt_opisanie = Report(root, width=50, height=5)
 txt_opisanie.place(x=5, y=200)  # создаем текстовое окно для описания
-
 lbl_haract = Label(root, text='Характеристика пива:')  # Создаем поле для указания характеристик
 lbl_haract.place(x=430, y=180)
-
 txt_haract = Report(root, width=30, height=5)  # Создаем текстовое поле для характеристик
 txt_haract.place(x=430, y=200)
-
 lbl_rec = Label(root, text='Рецепт:')  # создаем лейбл "рецепт"
 lbl_rec.place(x=5, y=288)
-
 txt_recept = Report(root, width=40, height=14)  # текстовое поле для рецепта
 txt_recept.place(x=5, y=310)
-
 txt_ruls = Report(root, width=40, height=12)  # текстовое поле для правил варки
 txt_ruls.place(x=340, y=310)
-
 lbl_ruls = Label(root, text='Процесс варки: ')  # Лейбл для обозначения процесса варки
 lbl_ruls.place(x=340, y=288)
-
 lbl_remarc = Label(root, width=55, height=1)
 lbl_remarc.place(x=330, y=520)
-
 root.mainloop()
