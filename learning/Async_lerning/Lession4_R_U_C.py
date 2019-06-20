@@ -3,7 +3,6 @@ import asyncio
 
 start = time.time()
 
-
 async def get_page(site_name):
     if site_name == "API ":
         await asyncio.sleep(0.1)
