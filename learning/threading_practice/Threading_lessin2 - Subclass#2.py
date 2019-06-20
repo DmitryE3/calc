@@ -8,15 +8,16 @@ class MyThread(threading.Thread):
         self.number=number
         self.style=style
 
-    def run(self,*args,**kwargs):
+    def run(self, *args, **kwargs):
         print('thread started')
         super(MyThread, self).run(*args, **kwargs)
         print('thread finished')
 
+
 def sleeper(num,style):
-    print('sleeping for {} sec style {}'.format(num,style))
+    print('sleeping for {} sec style {}'.format(num, style))
     time.sleep(num)
 
 
-t=MyThread(number=3,style='green',target=sleeper,args=[3,'green'])
+t=MyThread(number=3,style='green',target=sleeper,args=[3, 'green'])
 t.start()
