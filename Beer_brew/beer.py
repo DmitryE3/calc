@@ -1,6 +1,8 @@
 from tkinter import *
 import sqlite3
 import os
+import sys
+import subprocess
 
 
 class Report(Frame):  # Создаем класс для отображения всех окон с информацией
@@ -96,10 +98,12 @@ def run_print():  # запуск печати рецепта
         print_file.write(txt_recept.get())
         print_file.write('\nПравила варки:\n')
         print_file.write(txt_ruls.get())
-        os.startfile('recept.txt', 'print')
+        if sys.platform == 'win32':
+            os.startfile('recept.txt', 'print')
+        elif sys.platform == 'linux' or 'linux2':
+            subprocess.call(['xdg-open', 'recept.txt'])
         with open('recept.txt', 'w') as clean_file:  # очищаем временный файл для будущей печати
             clean_file.write('')
-
 
 def close():  # Функция закрытия окна с удалением временного файла и запросом на подтверждение закрытия
     def destroy1():  # ф-я подтверждения выхода
@@ -110,12 +114,12 @@ def close():  # Функция закрытия окна с удалением �
             pass
         root.destroy()
 
-
     def destroy2():  # ф-я отмены процедуры выхода
         ext_root.destroy()
         for i in widgets:
             i['state'] = NORMAL
         root.protocol("WM_DELETE_WINDOW", close)
+
     widgets = [btn_refresh, btn_litr, btn_print, btn_exit, lst_box, rbtn_level1, rbtn_level2, rbtn_level3]
     for i in widgets:
         i['state'] = DISABLED
