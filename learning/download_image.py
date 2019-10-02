@@ -35,4 +35,7 @@ images = []
 for i in find_img:
     if re.match('http', i):
         images.append(i)
-print(images)
+print(len(images))
+for i in range(len(images)):
+    print(str(i+1)+' izobrazhenie '+images[i])
+    
