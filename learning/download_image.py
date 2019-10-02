@@ -18,24 +18,24 @@ import threading
 import re
 from urllib.request import urlopen
 
-# Тут будет функция для скачивания
-def downloader():
-    pass
+
+def downloader(link_img, num_img):
+    img = urlopen(link_img).read()
+    with open('img{}.jpg'.format(num_img + 1), 'wb') as img_file:
+        img_file.write(img)
+    print('Potok ' + str(num_img + 1) + ' zakonchil zagruzku ' + link_img)
 
 
-#url = str(input())
-url = 'https://hh.ru/'
+url = str(input())
 f_html = urlopen(url)
 f_str = f_html.read()
 f_str = f_str.decode('utf-8')
-#f_bs = BS(f_str, 'lxml')
-#print(f_bs.find_all('img'))
 find_img = set(re.findall(r'src="(.+?)"', f_str))
 images = []
 for i in find_img:
     if re.match('http', i):
         images.append(i)
-print(len(images))
-for i in range(len(images)):
-    print(str(i+1)+' izobrazhenie '+images[i])
-    
+for num, link in enumerate(images):
+    print(str(num + 1) + ' izobrazhenie ' + link)
+    my_thread = threading.Thread(target=downloader, args=(link, num,))
+    my_thread.start()
