@@ -19,18 +19,29 @@ import re
 from urllib.request import urlopen
 
 
-def downloader(link_img, num_img):
+def downloader1(link_img, num_img):
     img = urlopen(link_img).read()
     with open('img{}.jpg'.format(num_img + 1), 'wb') as img_file:
         img_file.write(img)
     print('Potok ' + str(num_img + 1) + ' zakonchil zagruzku ' + link_img)
 
+def downloader(link_img, num):
+    try:
+        image = urlopen(link_img)
+        print('Potok '+str(num+1)+' zakonchil zagruzku '+link_img)
+    except:
+        print('error')
 
-url = str(input())
+
+#url = str(input())
+url = 'https://hh.ru/'
 f_html = urlopen(url)
 f_str = f_html.read()
 f_str = f_str.decode('utf-8')
-find_img = set(re.findall(r'src="(.+?)"', f_str))
+#find_img = set(re.findall(r'src="(.+?)"', f_str))
+#find_img = re.findall(r'<img(.*?)</img>', f_str)
+p = re.compile(r'<img\s+[^>]* ?src="(\w+[^>]*?)"', re.IGNORECASE)
+find_img = p.findall(f_str)
 images = []
 for i in find_img:
     if re.match('http', i):
@@ -39,3 +50,5 @@ for num, link in enumerate(images):
     print(str(num + 1) + ' izobrazhenie ' + link)
     my_thread = threading.Thread(target=downloader, args=(link, num,))
     my_thread.start()
+for i in range(len(images)):
+    my_thread.join()
