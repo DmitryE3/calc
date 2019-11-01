@@ -18,8 +18,8 @@ def graph(num=10):
     chart = {"renderTo": chartID, "type": 'areaspline', "height": 450}
     title = {"text": 'test test test'}
     xAxis = {"categories": [i for i in range(10)]}
-    yAxis = {"labels": {"format": '{value} thing'}, "title": {"text": 'Temperature'}}
-    series = [{"name": 'City', "data": [random.randint(0, 10) for i in range(num)]}]
+    yAxis = {"labels": {"format": '{value} thing'}, "title": {"text": 'Somethings'}}
+    series = [{"name": 'Some Line', "data": [random.randint(0, 100) for i in range(num)]}]
     return render_template("chart3.html", chartID=chartID, chart=chart, title=title, xAxis=xAxis, yAxis=yAxis,
                            series=series)
 
