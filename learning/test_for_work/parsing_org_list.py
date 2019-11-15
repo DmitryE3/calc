@@ -14,16 +14,21 @@ def make_soup():
     url = 'https://www.list-org.com/company/4868135'
     html_file = urlopen(url).read()
     soup_file = BS(html_file, 'html5lib')
-    print(soup_file.prettify())
-    print(soup_file.find_all('td', text=re.compile(r'ИНН')), 1)
-    #return soup_file
-
+    #print(soup_file.prettify())
 
 def find_info_second(soup_file):
     name = soup_file.find('a', {'class': 'upper'}).text
     boss = soup_file.find('a', {'title': re.compile(r'^все данные о')}).text
     date = soup_file.find(text=re.compile(r'\d{2}\.\d{2}\.\d{4}'))
     status = soup_file.find('td', {'class': 'status_1'}).text
+    inn = soup_file.find('title').text
+    inn = re.findall(r'ИНН:(\d+)', inn)[0]
+    #Сомнительный метод поиска КПП, надо подумать лучше
+    kpp = soup_file.find(text=re.compile(r'{} / \d+'.format(inn)))
+    kpp = kpp.split(' / ')[1]
+    meta = soup_file.find('meta', {'name': 'description'})
+    n = meta.get('content')
+    ogrn = re.findall(r'ОГРН:\s?(\d+)', n)[0]
 
 
 # Поиск требуемой инфы
