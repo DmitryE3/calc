@@ -22,8 +22,11 @@ def send_text(message):
         x = pattern.search(i)
         if x:
             pics.append(x.group())
-    for pic in pics:
-        bot.send_photo(message.chat.id, photo=open(directory+pic, 'rb'))
+    if len(pics) == 0:
+        bot.send_message(message.chat.id, 'По вашему запросу ничего не найдено')
+    else:
+        for pic in pics:
+            bot.send_photo(message.chat.id, photo=open(directory + pic, 'rb'))
 
 
 bot.polling()
