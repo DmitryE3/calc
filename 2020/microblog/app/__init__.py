@@ -2,10 +2,12 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from config import Config    # импортируем объекты класса Config из модуля config
+from flask_login import LoginManager
 
 app = Flask(__name__)
 app.config.from_object(Config)  # указываем, что для приложения app переменные конфига мы берем в Config
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+login = LoginManager(app)
 
 from app import routes, models
