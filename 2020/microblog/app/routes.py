@@ -23,20 +23,11 @@ def index():
         post = Post(body=form.post.data, author=current_user)
         db.session.add(post)
         db.session.commit()
-        flash('Your post now is live!')
+        flash('Your post is publicated')
         return redirect(url_for('index'))
-    # posts = [
-    #     {
-    #         'author': {'username': 'Lenin'},
-    #         'body': 'Learning, learning and again learning!'
-    #     },
-    #     {
-    #         'author': {'username': 'Pushkin'},
-    #         'body': 'Evgeniy Onegoin is a kaif!'
-    #     }
-    # ]
     posts = current_user.followed_posts().all()
-    return render_template('index.html', form=form, title='Home', posts=posts)
+    
+    return render_template('index.html', title='Home', posts=posts, form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
