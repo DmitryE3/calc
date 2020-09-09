@@ -1,18 +1,26 @@
-import telebot
+from bot import bot # Импортируем объект бота
+from messages import * # Инмпортируем все с файла сообщений
 import pickle
 import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
-from links import pattern_folder, telebot_id
+from config import pattern_folder
 
-
-bot = telebot.TeleBot(telebot_id)
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly']
 folder = pattern_folder
 
+
+@bot.message_handler(commands=['start']) # Выполняется, когда пользователь нажимает на start
+def send_welcome(message):
+    bot.send_message(message.chat.id, HELLO_MESSAGE)
+
+
+# @bot.message_handler(content_types=["text"]) # Любой текст
+# def repeat_all_messages(message):
+#     bot.send_message(message.chat.id, message.text)
 
 def parser(element):
     """Shows basic usage of the Drive v3 API.
@@ -58,6 +66,9 @@ def start_message(message):
         for name, link in result.items():
             bot.send_message(message.chat.id, name)
             bot.send_message(message.chat.id, link)
+    else:
+        bot.send_message(message.chat.id, 'No results were found for your search.')
 
 
-bot.polling()
+if __name__ == '__main__':
+    bot.polling(none_stop=True)
