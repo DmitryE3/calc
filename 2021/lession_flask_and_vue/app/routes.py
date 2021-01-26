@@ -1,7 +1,6 @@
-from flask import Flask, jsonify, request
-from flask_cors import CORS
-
-
+from app import app, db
+from flask import jsonify, request
+from app.models import Books
 
 BOOKS = [
     {
@@ -21,16 +20,6 @@ BOOKS = [
     }
 ]
 
-# configuration
-DEBUG = True
-
-# instantiate the app
-app = Flask(__name__)
-app.config.from_object(__name__)
-
-# enable CORS
-CORS(app)
-
 # sanity check route
 @app.route('/ping', methods=['GET'])
 def ping_pong():
@@ -43,18 +32,18 @@ def index():
 
 @app.route('/books', methods=['GET', 'POST'])
 def all_books():
+    """
+    function to display and add new books
+    :return:
+    """
     response_object = {'status': 'success'}
     if request.method == 'POST':
         post_data = request.get_json()
-        BOOKS.append({
-            'title': post_data.get('title'),
-            'author': post_data.get('author'),
-            'read': post_data.get('read')
-        })
+        book = Books(author=post_data.get('author'), book_name=post_data.get('title'), read=post_data.get('read'))
+        db.session.add(book)
+        db.session.commit()
         response_object['message'] = 'Book added!'
     else:
+
         response_object['books'] = BOOKS
     return jsonify(response_object)
-
-if __name__ == '__main__':
-    app.run()
