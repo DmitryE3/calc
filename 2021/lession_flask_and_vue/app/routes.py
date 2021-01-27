@@ -58,19 +58,15 @@ def all_books():
     return jsonify(response_object)
 
 
-@app.route('/books/', methods=['PUT'])
+@app.route('/books/<book_id>', methods=['PUT'])
 def single_book(book_id):
     response_object = {'status': 'success'}
     if request.method == 'PUT':
         post_data = request.get_json()
-        # remove_book(book_id)
-        print(book_id)
-        # BOOKS.append({
-        #     'id': book_id,
-        #     'title': post_data.get('title'),
-        #     'author': post_data.get('author'),
-        #     'read': post_data.get('read')
-        # })
+        remove_book(book_id)
+        book = Books(id=book_id, author=post_data.get('author'), book_name=post_data.get('title'), read=post_data.get('read'))
+        db.session.add(book)
+        db.session.commit()
         response_object['message'] = 'Book updated!'
     return jsonify(response_object)
 
@@ -79,8 +75,8 @@ def remove_book(book_id):
     book = Books.query.filter_by(id=book_id).all()
     print(book)
     if book:
-        for i in book():
-            i.delete()
+        for i in book:
+            db.session.delete(i)
             db.session.commit()
         return True
     return False
