@@ -2,23 +2,24 @@ from app import app, db
 from flask import jsonify, request
 from app.models import Books
 
-BOOKS = [
-    {
-        'title': 'On the Road',
-        'author': 'Jack Kerouac',
-        'read': True
-    },
-    {
-        'title': 'Harry Potter and the Philosopher\'s Stone',
-        'author': 'J. K. Rowling',
-        'read': False
-    },
-    {
-        'title': 'Green Eggs and Ham',
-        'author': 'Dr. Seuss',
-        'read': True
-    }
-]
+BOOKS = []
+#     {
+#         'title': 'On the Road',
+#         'author': 'Jack Kerouac',
+#         'read': True
+#     },
+#     {
+#         'title': 'Harry Potter and the Philosopher\'s Stone',
+#         'author': 'J. K. Rowling',
+#         'read': False
+#     },
+#     {
+#         'title': 'Green Eggs and Ham',
+#         'author': 'Dr. Seuss',
+#         'read': True
+#     }
+# ]
+
 
 # sanity check route
 @app.route('/ping', methods=['GET'])
@@ -44,6 +45,42 @@ def all_books():
         db.session.commit()
         response_object['message'] = 'Book added!'
     else:
-
+        BOOKS = []
+        books = Books.query.all()
+        for book in books:
+            BOOKS.append({
+                'id': book.id,
+                'title': book.book_name,
+                'author': book.author,
+                'read': book.read
+            })
         response_object['books'] = BOOKS
     return jsonify(response_object)
+
+
+@app.route('/books/', methods=['PUT'])
+def single_book(book_id):
+    response_object = {'status': 'success'}
+    if request.method == 'PUT':
+        post_data = request.get_json()
+        # remove_book(book_id)
+        print(book_id)
+        # BOOKS.append({
+        #     'id': book_id,
+        #     'title': post_data.get('title'),
+        #     'author': post_data.get('author'),
+        #     'read': post_data.get('read')
+        # })
+        response_object['message'] = 'Book updated!'
+    return jsonify(response_object)
+
+
+def remove_book(book_id):
+    book = Books.query.filter_by(id=book_id).all()
+    print(book)
+    if book:
+        for i in book():
+            i.delete()
+            db.session.commit()
+        return True
+    return False
