@@ -60,6 +60,11 @@ def all_books():
 
 @app.route('/books/<book_id>', methods=['PUT', 'DELETE'])
 def single_book(book_id):
+    """
+    Function for update and delete chosen book
+    :param book_id: id of chosen book
+    :return:
+    """
     response_object = {'status': 'success'}
     if request.method == 'PUT':
         post_data = request.get_json()
@@ -75,6 +80,11 @@ def single_book(book_id):
 
 
 def remove_book(book_id):
+    """
+    Book deletion handler
+    :param book_id: the id of the book to be deleted
+    :return:
+    """
     book = Books.query.filter_by(id=book_id).all()
     print(book)
     if book:
