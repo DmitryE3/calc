@@ -8,7 +8,10 @@ This means that you must shuffle all the letters from the input in all possible 
 import itertools
 
 
-def permutation(string):
+def permutation(string) -> list:
+    """
+    Функция переьора всех возможных вариантов расположения букв в строке
+    """
     data = list(itertools.combinations_with_replacement(string, len(string)))
     return data
 

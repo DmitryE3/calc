@@ -3,33 +3,7 @@ from flask import jsonify, request
 from app.models import Books
 
 BOOKS = []
-#     {
-#         'title': 'On the Road',
-#         'author': 'Jack Kerouac',
-#         'read': True
-#     },
-#     {
-#         'title': 'Harry Potter and the Philosopher\'s Stone',
-#         'author': 'J. K. Rowling',
-#         'read': False
-#     },
-#     {
-#         'title': 'Green Eggs and Ham',
-#         'author': 'Dr. Seuss',
-#         'read': True
-#     }
-# ]
 
-
-# sanity check route
-@app.route('/ping', methods=['GET'])
-def ping_pong():
-    return jsonify('pong!')
-
-@app.route('/', methods=['GET'])
-@app.route('/index', methods=['GET'])
-def index():
-    return "Ping!"
 
 @app.route('/books', methods=['GET', 'POST'])
 def all_books():
